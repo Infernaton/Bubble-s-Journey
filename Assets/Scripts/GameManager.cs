@@ -19,11 +19,13 @@ public class GameManager : MonoBehaviour
             _startWind = GetMousePosition();
         if (Mouse.current.leftButton.wasReleasedThisFrame){
             _endWind = GetMousePosition();
-            Wind w = Instantiate(m_WindPrefab);
+            //rotate the collider along the two point
+            float angle = Mathf.Atan2(_endWind.y - _startWind.y, _endWind.x - _startWind.x) * 180 / Mathf.PI - 90;
+            Wind w = Instantiate(m_WindPrefab, Vector3.Lerp(_startWind, _endWind, 0.5f), Quaternion.AngleAxis(angle, Vector3.forward));
             w.Init(_startWind, _endWind);
         }
 
-        m_Camera.transform.position += m_ScrollingSpeed * Time.deltaTime * Vector3.up;
+        m_Camera.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
     }
 
     Vector3 GetMousePosition()

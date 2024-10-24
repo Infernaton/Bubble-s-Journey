@@ -11,10 +11,18 @@ public class Wind : MonoBehaviour
 
     private float _currentLifeTime;
 
+    private CapsuleCollider _collider;
+
     public void Init(Vector3 startPos, Vector3 endPos)
     {
         m_StartPos = startPos;
         m_EndPos = endPos;
+        _collider.height = Vector3.Distance(startPos, endPos);
+    }
+
+    private void Awake()
+    {
+        _collider = GetComponent<CapsuleCollider>();
     }
 
     private void Start()
@@ -28,5 +36,11 @@ public class Wind : MonoBehaviour
         Debug.DrawLine(m_StartPos, m_EndPos, Color.yellow);
 
         if (Time.time - _currentLifeTime >= m_LifeTimeMax) Destroy(gameObject);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(m_StartPos, m_EndPos);
     }
 }

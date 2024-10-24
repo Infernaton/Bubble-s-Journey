@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8763273550856011396}
   - component: {fileID: 651763350666541944}
+  - component: {fileID: 6927046848932315126}
   m_Layer: 0
   m_Name: Wind
   m_TagString: Untagged
@@ -47,3 +48,26 @@ MonoBehaviour:
   m_LifeTimeMax: 5
   m_StartPos: {x: 0, y: 5, z: 0}
   m_EndPos: {x: 0, y: 10, z: 0}
+--- !u!136 &6927046848932315126
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939635283687171468}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
