@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Init Game")]
+    [SerializeField] float m_NbStartBubble;
+    [SerializeField] Bubble m_BubblePrefab;
+
+    [Header("During Game")]
     [SerializeField] Camera m_Camera;
     [SerializeField] GameObject m_Background;
     [SerializeField] Wind m_WindPrefab;
