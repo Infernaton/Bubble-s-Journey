@@ -9,6 +9,7 @@ public class Wind : MonoBehaviour
     [SerializeField] Vector3 m_StartPos;
     [SerializeField] Vector3 m_EndPos;
     [SerializeField] float m_SpeedOffset;
+    [SerializeField] ParticleSystem m_WindParticle;
 
     public Vector3 WindForce => new((m_EndPos.x - m_StartPos.x) / m_SpeedOffset, (m_EndPos.y - m_StartPos.y) / m_SpeedOffset, 0);
 
@@ -20,7 +21,16 @@ public class Wind : MonoBehaviour
     {
         m_StartPos = startPos;
         m_EndPos = endPos;
-        _collider.height = Vector3.Distance(startPos, endPos);
+        float height = Vector3.Distance(startPos, endPos);
+        _collider.height = height;
+
+        // m_WindParticle
+        // Change the start pos + z rotation + height
+        var editableShape = m_WindParticle.shape;
+        editableShape.position = new Vector3(0, -height/2, 0);
+
+        var editableMain = m_WindParticle.main;
+        editableMain.startLifetime = height / m_WindParticle.main.startSpeed.constant;
     }
 
     private void Awake()
