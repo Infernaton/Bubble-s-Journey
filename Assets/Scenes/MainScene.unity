@@ -271,11 +271,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c34bab2929a3fc346a50e5ab909ae3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NbStartBubble: 0
+  m_NbStartBubble: 10
+  m_SpawnTime: 2
   m_BubblePrefab: {fileID: 768634309993293372, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
+  m_SpawnPos1: {x: 10, y: 5, z: 0}
+  m_SpawnPos2: {x: -10, y: 5, z: 0}
   m_Camera: {fileID: 963194227}
   m_Background: {fileID: 1312766877}
   m_WindPrefab: {fileID: 651763350666541944, guid: 562e74fd413f74348bc70d2b1e7bfd08, type: 3}
+  m_CameraStartScroll: 3
   m_ScrollingSpeed: 1
 --- !u!1 &705507993
 GameObject:
@@ -790,6 +794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bubble
       objectReference: {fileID: 0}
+    - target: {fileID: 1609024756475444308, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5748008860673715514, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -829,6 +837,10 @@ PrefabInstance:
     - target: {fileID: 5748008860673715514, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788785022249276396, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
+      propertyPath: m_Mass
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

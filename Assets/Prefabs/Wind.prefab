@@ -50,7 +50,7 @@ MonoBehaviour:
   m_LifeTimeMax: 5
   m_StartPos: {x: 0, y: -2.5, z: 0}
   m_EndPos: {x: 0, y: 2.5, z: 0}
-  m_SpeedOffset: 2
+  m_SpeedOffset: 5
   m_WindParticle: {fileID: 6747738472368282328}
 --- !u!136 &6927046848932315126
 CapsuleCollider:
