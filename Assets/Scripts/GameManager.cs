@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float startedTime = Time.time - m_SpawnTime;
+        Physics.simulationMode = startedTime < 0 ? SimulationMode.Script : SimulationMode.FixedUpdate;
+        if (startedTime < 0) return;
+
         if (Mouse.current.leftButton.wasPressedThisFrame)
             _startWind = GetMousePosition();
         if (Mouse.current.leftButton.wasReleasedThisFrame){
@@ -42,8 +46,7 @@ public class GameManager : MonoBehaviour
             w.Init(_startWind, _endWind);
         }
 
-        if (Time.time - m_SpawnTime - m_CameraStartScroll < 0) return;
-
+        if (startedTime - m_CameraStartScroll < 0) return;
         m_Camera.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
     }
 
