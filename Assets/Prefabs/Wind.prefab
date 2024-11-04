@@ -47,11 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1358097aa56905047844f3efe3ff94ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_WindParticle: {fileID: 6747738472368282328}
   m_LifeTimeMax: 5
   m_StartPos: {x: 0, y: -2.5, z: 0}
   m_EndPos: {x: 0, y: 2.5, z: 0}
-  m_SpeedOffset: 5
-  m_WindParticle: {fileID: 6747738472368282328}
+  m_OverallSpeedOffset: 5
+  m_DistanceSpeedReducer: 3
 --- !u!136 &6927046848932315126
 CapsuleCollider:
   m_ObjectHideFlags: 0

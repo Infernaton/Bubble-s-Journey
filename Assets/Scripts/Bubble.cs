@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class Bubble : MonoBehaviour
     {
         foreach (Wind wind in _winds)
         {
-            _rb.AddForce(wind.WindForce);
+            _rb.AddForce(wind.WindForce * wind.GetWindForceModifier(transform.position));
         }
     }
 

@@ -1,21 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 
 public class Wind : MonoBehaviour
 {
+    [SerializeField] ParticleSystem m_WindParticle;
     [SerializeField] float m_LifeTimeMax = 5;
     [SerializeField] Vector3 m_StartPos;
     [SerializeField] Vector3 m_EndPos;
-    [SerializeField] float m_SpeedOffset;
-    [SerializeField] ParticleSystem m_WindParticle;
 
-    public Vector3 WindForce => new((m_EndPos.x - m_StartPos.x) / m_SpeedOffset, (m_EndPos.y - m_StartPos.y) / m_SpeedOffset, 0);
+    [Header("Wind force reducer")]
+    [SerializeField] float m_OverallSpeedOffset;
+    [SerializeField] float m_DistanceSpeedReducer;
+
+    public Vector3 WindForce => new((m_EndPos.x - m_StartPos.x) / m_OverallSpeedOffset, (m_EndPos.y - m_StartPos.y) / m_OverallSpeedOffset, 0);
 
     private float _currentLifeTime;
-
     private CapsuleCollider _collider;
+
+    /**
+     * Modify the force of the wind, depending on the distance between the object and the Start position
+     */
+    public float GetWindForceModifier(Vector3 contactPosition)
+    {
+        float distance = Vector3.Distance(m_StartPos, contactPosition);
+        return 1 / distance * m_DistanceSpeedReducer;
+    }
 
     public void Init(Vector3 startPos, Vector3 endPos)
     {
