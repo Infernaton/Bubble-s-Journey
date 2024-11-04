@@ -21,6 +21,26 @@ public class GameManager : MonoBehaviour
     private Vector3 _startWind;
     private Vector3 _endWind;
 
+    private float _nbBubble;
+    public float NbBubble
+    {
+        get => _nbBubble;
+        set 
+        {
+            _nbBubble = value;
+        }
+    }
+
+    public static GameManager Instance = null;
+
+    private void Awake()
+    {
+        if (Instance == null) // If there is no instance already
+            Instance = this;
+        else if (Instance != this)
+            Destroy(gameObject);
+    }
+
     private void Start()
     {
         float time = m_SpawnTime / m_NbStartBubble;

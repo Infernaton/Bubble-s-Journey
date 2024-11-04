@@ -29,4 +29,17 @@ public class Bubble : MonoBehaviour
     {
         if (_winds.Contains(wind)) _winds.Remove(wind);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("BubbleDestroyer"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.NbBubble--;
+    }
 }
