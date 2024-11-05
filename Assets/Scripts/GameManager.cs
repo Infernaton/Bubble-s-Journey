@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         set 
         {
             _nbBubble = value;
+            UIManager.Instance.UpdateBubbleCounter(_nbBubble);
         }
     }
 
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
     {
         Vector3 pos = Vector3.Lerp(m_SpawnPos1, m_SpawnPos2, Random.value);
         Instantiate(m_BubblePrefab, pos, Quaternion.identity, transform);
+        NbBubble++;
     }
 
     Vector3 GetMousePosition()
