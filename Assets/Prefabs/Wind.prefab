@@ -51,8 +51,8 @@ MonoBehaviour:
   m_LifeTimeMax: 5
   m_StartPos: {x: 0, y: -2.5, z: 0}
   m_EndPos: {x: 0, y: 2.5, z: 0}
-  m_OverallSpeedOffset: 5
-  m_DistanceSpeedReducer: 3
+  m_OverallSpeedOffset: 100
+  m_DistanceSpeedReducer: 5
 --- !u!136 &6927046848932315126
 CapsuleCollider:
   m_ObjectHideFlags: 0

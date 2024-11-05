@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Vector3 m_SpawnPos2;
 
     [Header("During Game")]
-    [SerializeField] Camera m_Camera;
+    [SerializeField] GameObject AscendingObject;
     [SerializeField] GameObject m_Background;
     [SerializeField] Wind m_WindPrefab;
 
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (startedTime - m_CameraStartScroll < 0) return;
-        m_Camera.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
+        AscendingObject.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
     }
 
     void SpawnBubble()
