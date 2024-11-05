@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Init Game")]
     [SerializeField] float m_NbStartBubble;
-    [SerializeField] float m_SpawnTime;
+    [SerializeField] float m_SpawnBubbleTime;
     [SerializeField] Bubble m_BubblePrefab;
     [SerializeField] Vector3 m_SpawnPos1;
     [SerializeField] Vector3 m_SpawnPos2;
@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject m_Background;
     [SerializeField] Wind m_WindPrefab;
 
-    [SerializeField] float m_CameraStartScroll;
+    [SerializeField] float m_TimeBeforeScroll;
     [SerializeField] float m_ScrollingSpeed;
 
     private Vector3 _startWind;
@@ -44,15 +44,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        float time = m_SpawnTime / m_NbStartBubble;
+        float time = m_SpawnBubbleTime / m_NbStartBubble;
         InvokeRepeating(nameof(SpawnBubble), 0, time);
-        Invoke(nameof(CancelInvoke), m_SpawnTime);
+        Invoke(nameof(CancelInvoke), m_SpawnBubbleTime);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float startedTime = Time.time - m_SpawnTime;
+        float startedTime = Time.time - m_SpawnBubbleTime;
         Physics.simulationMode = startedTime < 0 ? SimulationMode.Script : SimulationMode.FixedUpdate;
         if (startedTime < 0) return;
 
@@ -66,7 +65,7 @@ public class GameManager : MonoBehaviour
             w.Init(_startWind, _endWind);
         }
 
-        if (startedTime - m_CameraStartScroll < 0) return;
+        if (startedTime - m_TimeBeforeScroll < 0) return;
         AscendingObject.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
     }
 

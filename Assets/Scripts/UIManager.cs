@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI m_BubbleCounter;
+    [SerializeField] private TMP_Text m_BubbleCounter;
 
     public static UIManager Instance = null;
     private void Awake()
