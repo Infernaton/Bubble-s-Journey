@@ -46,7 +46,13 @@ public class GameManager : MonoBehaviour
     {
         float time = m_SpawnBubbleTime / m_NbStartBubble;
         InvokeRepeating(nameof(SpawnBubble), 0, time);
-        Invoke(nameof(CancelInvoke), m_SpawnBubbleTime);
+        Invoke(nameof(GameStart), m_SpawnBubbleTime);
+    }
+
+    private void GameStart()
+    {
+        CancelInvoke();
+        StartCoroutine(Utils.Anim.SlideOut(0.4f, UIManager.Instance.CinematicView));
     }
 
     void Update()

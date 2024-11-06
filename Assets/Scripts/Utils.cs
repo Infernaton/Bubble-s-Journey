@@ -125,5 +125,38 @@ namespace Utils
             foreach (Renderer r in objectRenderers)
                 r.enabled = hasToRender;
         }
+
+        public static IEnumerator SlideIn(float t, CanvasGroup i)
+        {
+            
+            yield return SlideIn(t, i.gameObject, 1f);
+        }
+
+        public static IEnumerator SlideOut(float t, CanvasGroup i)
+        {
+            yield return SlideOut(t, i.gameObject, 2f);
+        }
+
+        private static IEnumerator SlideIn(float t, GameObject o, float targetScale)
+        {
+            o.SetActive(true);
+            while (o.transform.localScale.x > targetScale)
+            {
+                Vector3 addScale = o.transform.localScale * targetScale * (Time.deltaTime / t);
+                o.transform.localScale = o.transform.localScale - addScale;
+                yield return null;
+            }
+        }
+        private static IEnumerator SlideOut(float t, GameObject o, float targetScale)
+        {
+            while (o.transform.localScale.x < targetScale)
+            {
+                Debug.Log(targetScale * (Time.deltaTime / t));
+                Vector3 addScale = o.transform.localScale * targetScale * (Time.deltaTime / t);
+                o.transform.localScale = o.transform.localScale + addScale;
+                yield return null;
+            }
+            o.SetActive(false);
+        }
     }
 }
