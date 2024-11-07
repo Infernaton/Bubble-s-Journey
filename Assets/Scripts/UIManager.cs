@@ -16,7 +16,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RawImage m_RawImageObject;
     [SerializeField] private Vector2 m_StartPosAnimation;
     [SerializeField] private Vector2 m_EndPosAnimation;
-    [SerializeField] private float m_SpeedAnimation;
+    [SerializeField] private float m_AnimationTime;
+    [SerializeField] private AnimationCurve m_MovementCurve;
 
     public CanvasGroup CinematicView => m_CinematicViewUI;
 
@@ -34,20 +35,41 @@ public class UIManager : MonoBehaviour
         m_BubbleCounter.text = "Bulles : " + nb;
     }
 
+    [ContextMenu("StopAnimation")]
+    public void StopAnimation()
+    {
+        StopAllCoroutines();
+    }
+
     [ContextMenu("PlayClickAnimation")]
     public void PlayClickAnimation()
     {
-        m_RawImageObject.gameObject.SetActive(true);
         StartCoroutine(ClickAnimation());
     }
+
     public IEnumerator ClickAnimation()
     {
+        float fadeTime = 0.1f;
+        float idleTime = 0.3f;
+        //Init
+        m_RawImageObject.rectTransform.anchoredPosition = m_StartPosAnimation;
         m_RawImageObject.texture = m_CursorIcon;
-        yield return new WaitForSeconds(1f);
+        
+        //Start
+        yield return Utils.Anim.FadeIn(fadeTime, m_RawImageObject);
+        yield return new WaitForSeconds(idleTime);
+
+        //Hold Click
         m_RawImageObject.texture = m_CursorClickIcon;
-        yield return new WaitForSeconds(0.1f);
+
+        //Moves to destination
+        yield return Utils.Anim.MoveUI(m_RawImageObject.rectTransform, m_EndPosAnimation, m_AnimationTime - 2*idleTime - 2*fadeTime, m_MovementCurve);
+
+        //Release Click
         m_RawImageObject.texture = m_CursorIcon;
-        yield return new WaitForSeconds(1f);
-        m_RawImageObject.gameObject.SetActive(false);
+
+        //End
+        yield return new WaitForSeconds(idleTime);
+        yield return Utils.Anim.FadeOut(fadeTime, m_RawImageObject);
     }
 }

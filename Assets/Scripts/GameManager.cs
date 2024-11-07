@@ -1,8 +1,18 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
+using System.Collections;
+
+public enum GameState
+{
+    StartAnim,
+    Play,
+    EndGame
+}
 
 public class GameManager : MonoBehaviour
 {
+    public GameState State;
+
     [Header("Init Game")]
     [SerializeField] float m_NbStartBubble;
     [SerializeField] float m_SpawnBubbleTime;
@@ -29,6 +39,8 @@ public class GameManager : MonoBehaviour
         {
             _nbBubble = value;
             UIManager.Instance.UpdateBubbleCounter(_nbBubble);
+            if (_nbBubble <= 0)
+                GameOver();
         }
     }
 
@@ -44,22 +56,32 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        State = GameState.StartAnim;
         float time = m_SpawnBubbleTime / m_NbStartBubble;
         InvokeRepeating(nameof(SpawnBubble), 0, time);
-        Invoke(nameof(GameStart), m_SpawnBubbleTime);
+        StartCoroutine(GameStart());
+        //Invoke(nameof(GameStart), m_SpawnBubbleTime);
     }
 
-    private void GameStart()
+    private IEnumerator GameStart()
     {
-        CancelInvoke();
+        yield return new WaitForSeconds(m_SpawnBubbleTime);
         StartCoroutine(Utils.Anim.SlideOut(0.4f, UIManager.Instance.CinematicView));
+        yield return UIManager.Instance.ClickAnimation();
+        CancelInvoke();
+        State = GameState.Play;
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
+        State = GameState.EndGame;
     }
 
     void Update()
     {
-        float startedTime = Time.time - m_SpawnBubbleTime;
-        Physics.simulationMode = startedTime < 0 ? SimulationMode.Script : SimulationMode.FixedUpdate;
-        if (startedTime < 0) return;
+        Physics.simulationMode = State != GameState.Play ? SimulationMode.Script : SimulationMode.FixedUpdate;
+        if (State != GameState.Play) return;
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
             _startWind = GetMousePosition();
@@ -71,7 +93,7 @@ public class GameManager : MonoBehaviour
             w.Init(_startWind, _endWind);
         }
 
-        if (startedTime - m_TimeBeforeScroll < 0) return;
+        if (Time.time - m_SpawnBubbleTime - m_TimeBeforeScroll < 0 || State == GameState.EndGame) return;
         AscendingObject.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
     }
 

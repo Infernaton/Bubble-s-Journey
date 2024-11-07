@@ -2,11 +2,24 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Collections;
+using System;
 
 namespace Utils
 {
     public class Anim
     {
+        private static IEnumerator AnimationOnCurve(float time, Action<float> animation, AnimationCurve curve)
+        {
+            float currentTime = 0f;
+
+            while (currentTime < time)
+            {
+                animation(curve.Evaluate(currentTime / time));
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
+
+        }
         #region FadeIn/FadeOut
         #region TMP_Text
         public static IEnumerator FadeIn(float t, TMP_Text txt)
@@ -126,6 +139,7 @@ namespace Utils
                 r.enabled = hasToRender;
         }
 
+        #region SlideIn/SlideOut
         public static IEnumerator SlideIn(float t, CanvasGroup i)
         {
             
@@ -151,12 +165,21 @@ namespace Utils
         {
             while (o.transform.localScale.x < targetScale)
             {
-                Debug.Log(targetScale * (Time.deltaTime / t));
                 Vector3 addScale = o.transform.localScale * targetScale * (Time.deltaTime / t);
                 o.transform.localScale = o.transform.localScale + addScale;
                 yield return null;
             }
             o.SetActive(false);
         }
+        #endregion
+
+        #region MovesTo
+        public static IEnumerator MoveUI(RectTransform o, Vector2 to, float time, AnimationCurve curve)
+        {
+            Vector2 from = o.anchoredPosition;
+            yield return AnimationOnCurve(time, t => o.anchoredPosition = Vector2.Lerp(from, to, t), curve);
+        }
+
+        #endregion
     }
 }
