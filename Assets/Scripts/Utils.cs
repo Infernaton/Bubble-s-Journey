@@ -180,6 +180,11 @@ namespace Utils
             yield return AnimationOnCurve(time, t => o.anchoredPosition = Vector2.Lerp(from, to, t), curve);
         }
 
+        public static IEnumerator MoveObject(Transform o, Vector3 to, float time, AnimationCurve curve)
+        {
+            Vector3 from = o.position;
+            yield return AnimationOnCurve(time, t => o.position = Vector3.Lerp(from, to, t), curve);
+        }
         #endregion
     }
 }

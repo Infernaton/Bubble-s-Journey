@@ -1,11 +1,12 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
 using System.Collections;
+using Utils;
 
 public enum GameState
 {
-    StartAnim,
-    Play,
+    PlayAnimation,
+    CanInterract,
     EndGame
 }
 
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
     public GameState State;
 
     [Header("Init Game")]
-    [SerializeField] float m_NbStartBubble;
+    [SerializeField] float m_NbBubbleControl;
     [SerializeField] float m_SpawnBubbleTime;
     [SerializeField] Bubble m_BubblePrefab;
     [SerializeField] Vector3 m_SpawnPos1;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     [Header("During Game")]
     [SerializeField] GameObject AscendingObject;
+    [SerializeField] AnimationCurve m_AscendingAnimation;
     [SerializeField] GameObject m_Background;
     [SerializeField] Wind m_WindPrefab;
 
@@ -56,8 +58,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        State = GameState.StartAnim;
-        float time = m_SpawnBubbleTime / m_NbStartBubble;
+        State = GameState.PlayAnimation;
+        float time = m_SpawnBubbleTime / m_NbBubbleControl;
         InvokeRepeating(nameof(SpawnBubble), 0, time);
         StartCoroutine(GameStart());
         //Invoke(nameof(GameStart), m_SpawnBubbleTime);
@@ -66,10 +68,10 @@ public class GameManager : MonoBehaviour
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(m_SpawnBubbleTime);
-        StartCoroutine(Utils.Anim.SlideOut(0.4f, UIManager.Instance.CinematicView));
+        StartCoroutine(Anim.SlideOut(0.4f, UIManager.Instance.CinematicView));
         yield return UIManager.Instance.ClickAnimation();
         CancelInvoke();
-        State = GameState.Play;
+        State = GameState.CanInterract;
     }
 
     public void GameOver()
@@ -80,8 +82,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Physics.simulationMode = State != GameState.Play ? SimulationMode.Script : SimulationMode.FixedUpdate;
-        if (State != GameState.Play) return;
+        Physics.simulationMode = State != GameState.CanInterract ? SimulationMode.Script : SimulationMode.FixedUpdate;
+        if (State != GameState.CanInterract) return;
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
             _startWind = GetMousePosition();
@@ -93,8 +95,18 @@ public class GameManager : MonoBehaviour
             w.Init(_startWind, _endWind);
         }
 
-        if (Time.time - m_SpawnBubbleTime - m_TimeBeforeScroll < 0 || State == GameState.EndGame) return;
-        AscendingObject.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
+        if (Time.time - m_SpawnBubbleTime - m_TimeBeforeScroll < 0) return;
+        UpdateCameraPosition();
+    }
+
+    private void UpdateCameraPosition()
+    {
+        print(AverageBubblePosition());
+        //Anim.MoveObject(AscendingObject.transform, AverageBubblePosition(), Time.deltaTime, m_AscendingAnimation);
+        //AscendingObject.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
+        Vector3 vel = Vector3.zero;
+        Vector3 pos = Vector3.SmoothDamp(AscendingObject.transform.position, AverageBubblePosition(), ref vel, m_ScrollingSpeed);
+        AscendingObject.transform.position = new Vector3(AscendingObject.transform.position.x, pos.y, AscendingObject.transform.position.z);
     }
 
     void SpawnBubble()
@@ -116,6 +128,17 @@ public class GameManager : MonoBehaviour
         Physics.Raycast(rayCast, out RaycastHit hit, Camera.main.farClipPlane);
         Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red);
         return new Vector3(hit.point.x, hit.point.y, 0);
+    }
+
+    private Vector3 AverageBubblePosition()
+    {
+        //Because bubble are stored as child of the gamemanager
+        Vector3 average = Vector3.zero;
+        foreach (Transform child in transform)
+        {
+            average += child.position;
+        }
+        return average / transform.childCount;
     }
 
     private void OnDrawGizmosSelected()

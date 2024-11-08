@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateBubbleCounter(float nb)
     {
-        m_BubbleCounter.text = "Bulles : " + nb;
+        m_BubbleCounter.text = "Essais : " + nb;
     }
 
     [ContextMenu("StopAnimation")]
