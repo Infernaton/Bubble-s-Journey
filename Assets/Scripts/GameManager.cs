@@ -40,12 +40,17 @@ public class GameManager : MonoBehaviour
         {
             _nbBubble = value;
             UIManager.Instance.UpdateBubbleCounter(_nbBubble);
-            if (_nbBubble <= 0)
-                GameOver();
         }
     }
 
     public static GameManager Instance = null;
+
+    public void SpawnBubble()
+    {
+        Vector3 pos = Vector3.Lerp(m_SpawnPos1, m_SpawnPos2, Random.value);
+        Instantiate(m_BubblePrefab, pos, Quaternion.identity, transform);
+        NbBubble++;
+    }
 
     private void Awake()
     {
@@ -104,13 +109,6 @@ public class GameManager : MonoBehaviour
             AscendingObject.transform.position,
             m_AscendingObjectOffset + Vector3.up * AverageBubblePosition().y, 
             ref vel, m_ScrollingSpeed, Mathf.Infinity, Time.smoothDeltaTime);
-    }
-
-    void SpawnBubble()
-    {
-        Vector3 pos = Vector3.Lerp(m_SpawnPos1, m_SpawnPos2, Random.value);
-        Instantiate(m_BubblePrefab, pos, Quaternion.identity, transform);
-        NbBubble++;
     }
 
     Vector3 GetMousePosition()

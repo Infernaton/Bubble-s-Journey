@@ -40,6 +40,6 @@ public class Bubble : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.Instance.NbBubble--;
+        GameManager.Instance.SpawnBubble();
     }
 }
