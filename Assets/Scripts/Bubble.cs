@@ -35,11 +35,7 @@ public class Bubble : MonoBehaviour
         if (collision.gameObject.CompareTag("BubbleDestroyer"))
         {
             Destroy(gameObject);
+            GameManager.Instance.SpawnBubble();
         }
-    }
-
-    private void OnDestroy()
-    {
-        GameManager.Instance.SpawnBubble();
     }
 }
