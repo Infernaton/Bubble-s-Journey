@@ -466,7 +466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &472815516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,35 +646,11 @@ MonoBehaviour:
   m_BubblePrefab: {fileID: 768634309993293372, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
   m_SpawnPos1: {x: 7, y: 5, z: 0}
   m_SpawnPos2: {x: -7, y: 5, z: 0}
+  m_AscendingObjectOffset: {x: 0, y: 0, z: -7}
   AscendingObject: {fileID: 963194225}
-  m_AscendingAnimation:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   m_Background: {fileID: 1312766877}
   m_WindPrefab: {fileID: 651763350666541944, guid: 562e74fd413f74348bc70d2b1e7bfd08, type: 3}
-  m_TimeBeforeScroll: 5
-  m_ScrollingSpeed: 1
+  m_ScrollingSpeed: 0.1
 --- !u!1 &496467037
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,12 +22,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] Vector3 m_SpawnPos2;
 
     [Header("During Game")]
+    [SerializeField] Vector3 m_AscendingObjectOffset;
     [SerializeField] GameObject AscendingObject;
-    [SerializeField] AnimationCurve m_AscendingAnimation;
     [SerializeField] GameObject m_Background;
     [SerializeField] Wind m_WindPrefab;
 
-    [SerializeField] float m_TimeBeforeScroll;
     [SerializeField] float m_ScrollingSpeed;
 
     private Vector3 _startWind;
@@ -68,9 +67,9 @@ public class GameManager : MonoBehaviour
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(m_SpawnBubbleTime);
-        StartCoroutine(Anim.SlideOut(0.4f, UIManager.Instance.CinematicView));
-        yield return UIManager.Instance.ClickAnimation();
         CancelInvoke();
+        yield return Anim.SlideOut(0.4f, UIManager.Instance.CinematicView);
+        StartCoroutine(UIManager.Instance.ClickAnimation());
         State = GameState.CanInterract;
     }
 
@@ -95,18 +94,16 @@ public class GameManager : MonoBehaviour
             w.Init(_startWind, _endWind);
         }
 
-        if (Time.time - m_SpawnBubbleTime - m_TimeBeforeScroll < 0) return;
         UpdateCameraPosition();
     }
 
     private void UpdateCameraPosition()
     {
-        print(AverageBubblePosition());
-        //Anim.MoveObject(AscendingObject.transform, AverageBubblePosition(), Time.deltaTime, m_AscendingAnimation);
-        //AscendingObject.transform.position += Vector3.up * m_ScrollingSpeed * Time.deltaTime;
         Vector3 vel = Vector3.zero;
-        Vector3 pos = Vector3.SmoothDamp(AscendingObject.transform.position, AverageBubblePosition(), ref vel, m_ScrollingSpeed);
-        AscendingObject.transform.position = new Vector3(AscendingObject.transform.position.x, pos.y, AscendingObject.transform.position.z);
+        AscendingObject.transform.position = Vector3.SmoothDamp(
+            AscendingObject.transform.position,
+            m_AscendingObjectOffset + Vector3.up * AverageBubblePosition().y, 
+            ref vel, m_ScrollingSpeed, Mathf.Infinity, Time.smoothDeltaTime);
     }
 
     void SpawnBubble()
