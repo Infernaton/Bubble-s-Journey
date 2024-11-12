@@ -641,7 +641,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   State: 0
-  m_NbBubbleControl: 1
   m_SpawnBubbleTime: 1
   m_BubblePrefab: {fileID: 768634309993293372, guid: 5d401bf73e33d2a4db826a1cf43ca7ff, type: 3}
   m_SpawnPos1: {x: 7, y: 5, z: 0}

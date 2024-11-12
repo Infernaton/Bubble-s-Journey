@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public GameState State;
 
     [Header("Init Game")]
-    [SerializeField] float m_NbBubbleControl;
     [SerializeField] float m_SpawnBubbleTime;
     [SerializeField] Bubble m_BubblePrefab;
     [SerializeField] Vector3 m_SpawnPos1;
@@ -63,16 +62,14 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         State = GameState.PlayAnimation;
-        float time = m_SpawnBubbleTime / m_NbBubbleControl;
-        InvokeRepeating(nameof(SpawnBubble), 0, time);
+        float time = m_SpawnBubbleTime;
+        Invoke(nameof(SpawnBubble), time/2);
         StartCoroutine(GameStart());
-        //Invoke(nameof(GameStart), m_SpawnBubbleTime);
     }
 
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(m_SpawnBubbleTime);
-        CancelInvoke();
         yield return Anim.SlideOut(0.4f, UIManager.Instance.CinematicView);
         StartCoroutine(UIManager.Instance.ClickAnimation());
         State = GameState.CanInterract;
