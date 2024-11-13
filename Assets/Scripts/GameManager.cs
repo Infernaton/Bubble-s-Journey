@@ -101,11 +101,10 @@ public class GameManager : MonoBehaviour
 
     private void UpdateCameraPosition()
     {
-        Vector3 vel = Vector3.zero;
-        AscendingObject.transform.position = Vector3.SmoothDamp(
+        AscendingObject.transform.position = Vector3.Lerp(
             AscendingObject.transform.position,
-            m_AscendingObjectOffset + Vector3.up * AverageBubblePosition().y, 
-            ref vel, m_ScrollingSpeed, Mathf.Infinity, Time.smoothDeltaTime);
+            m_AscendingObjectOffset + Vector3.up * AverageBubblePosition().y,
+            Time.smoothDeltaTime * m_ScrollingSpeed);
     }
 
     Vector3 GetMousePosition()
