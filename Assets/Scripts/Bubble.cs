@@ -38,4 +38,12 @@ public class Bubble : MonoBehaviour
             GameManager.Instance.SpawnBubble();
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("WinObject"))
+        {
+            GameManager.Instance.GameOver();
+        }
+    }
 }
