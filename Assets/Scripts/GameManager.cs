@@ -28,9 +28,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] float m_ScrollingSpeed;
 
-    private Vector3 _startWind;
-    private Vector3 _endWind;
-
     private float _nbBubble;
     public float NbBubble
     {
@@ -41,6 +38,9 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.UpdateBubbleCounter(_nbBubble);
         }
     }
+
+    private Vector2 _startWind;
+    public Vector2 MousePositionOnScreen => Mouse.current.position.value;
 
     public static GameManager Instance = null;
 
@@ -67,33 +67,22 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GameStart());
     }
 
-    private IEnumerator GameStart()
-    {
-        yield return new WaitForSeconds(m_SpawnBubbleTime);
-        yield return Anim.SlideOut(0.4f, UIManager.Instance.CinematicView);
-        StartCoroutine(UIManager.Instance.ClickAnimation());
-        State = GameState.CanInterract;
-    }
-
-    public void GameOver()
-    {
-        Debug.Log("GameOver");
-        State = GameState.EndGame;
-    }
-
     void Update()
     {
         Physics.simulationMode = State != GameState.CanInterract ? SimulationMode.Script : SimulationMode.FixedUpdate;
         if (State != GameState.CanInterract) return;
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
-            _startWind = GetMousePosition();
+            _startWind = MousePositionOnScreen;
         if (Mouse.current.leftButton.wasReleasedThisFrame){
-            _endWind = GetMousePosition();
+            // Delayed the position In Game of the mouse position at pressed event
+            // Because their a constant camera movement: the initial position when pressed is not really respected when we release the button, and feal a little uncanny
+            Vector3 startPosIG = GetMousePositionIG(_startWind);
+            Vector3 endPosIG = GetMousePositionIG(MousePositionOnScreen);
             //rotate the collider along the two point
-            float angle = Mathf.Atan2(_endWind.y - _startWind.y, _endWind.x - _startWind.x) * 180 / Mathf.PI - 90;
-            Wind w = Instantiate(m_WindPrefab, Vector3.Lerp(_startWind, _endWind, 0.5f), Quaternion.AngleAxis(angle, Vector3.forward));
-            w.Init(_startWind, _endWind);
+            float angle = Mathf.Atan2(endPosIG.y - startPosIG.y, endPosIG.x - startPosIG.x) * 180 / Mathf.PI - 90;
+            Wind w = Instantiate(m_WindPrefab, Vector3.Lerp(startPosIG, endPosIG, 0.5f), Quaternion.AngleAxis(angle, Vector3.forward));
+            w.Init(startPosIG, endPosIG);
         }
 
         UpdateCameraPosition();
@@ -107,10 +96,9 @@ public class GameManager : MonoBehaviour
             Time.smoothDeltaTime * m_ScrollingSpeed);
     }
 
-    Vector3 GetMousePosition()
+    Vector3 GetMousePositionIG(Vector2 mousePositionOnScreen)
     {
-        Vector2 mousePos = Mouse.current.position.value;
-        Vector3 startPos = new Vector3(mousePos.x, mousePos.y, Camera.main.nearClipPlane);
+        Vector3 startPos = new (mousePositionOnScreen.x, mousePositionOnScreen.y, Camera.main.nearClipPlane);
 
         //Get ray from mouse postion
         Ray rayCast = Camera.main.ScreenPointToRay(startPos);
@@ -130,6 +118,20 @@ public class GameManager : MonoBehaviour
             average += child.position;
         }
         return average / transform.childCount;
+    }
+
+    private IEnumerator GameStart()
+    {
+        yield return new WaitForSeconds(m_SpawnBubbleTime);
+        yield return Anim.SlideOut(0.4f, UIManager.Instance.CinematicView);
+        StartCoroutine(UIManager.Instance.ClickAnimation());
+        State = GameState.CanInterract;
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
+        State = GameState.EndGame;
     }
 
     private void OnDrawGizmosSelected()
