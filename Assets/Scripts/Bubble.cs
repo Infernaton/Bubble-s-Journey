@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +18,10 @@ public class Bubble : MonoBehaviour
         {
             _rb.AddForce(wind.WindForce * wind.GetWindForceModifier(transform.position));
         }
+        if (Math.Abs(transform.position.x) >= GameManager.Instance.GetBorderTPOffset())
+            transform.position = new Vector3(transform.position.x * -1, transform.position.y, transform.position.z);
+
+        GameManager.Instance.HighScore = transform.position.y;
     }
 
     public void AddWindEffect(Wind wind)

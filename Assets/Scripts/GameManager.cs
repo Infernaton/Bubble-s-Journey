@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject AscendingObject;
     [SerializeField] GameObject m_Background;
     [SerializeField] Wind m_WindPrefab;
+    [SerializeField] float m_BorderTPOffset;
 
     [SerializeField] float m_ScrollingSpeed;
 
@@ -39,8 +40,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private float _highScore = 0f;
+    public float HighScore
+    {
+        get => _highScore;
+        set
+        {
+            if (value > _highScore)
+            {
+                _highScore = value;
+                UIManager.Instance.UpdateHighScoreCounter(Mathf.Round(value)); 
+            }
+        }
+    }
     private Vector2 _startWind;
     public Vector2 MousePositionOnScreen => Mouse.current.position.value;
+    public float GetBorderTPOffset() => m_BorderTPOffset;
 
     public static GameManager Instance = null;
 
@@ -84,6 +99,8 @@ public class GameManager : MonoBehaviour
             Wind w = Instantiate(m_WindPrefab, Vector3.Lerp(startPosIG, endPosIG, 0.5f), Quaternion.AngleAxis(angle, Vector3.forward));
             w.Init(startPosIG, endPosIG);
         }
+
+        UIManager.Instance.UpdateTimeCounter(Time.time);
 
         UpdateCameraPosition();
     }

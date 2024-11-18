@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] private TMP_Text m_BubbleCounter;
+    [SerializeField] private TMP_Text m_HighScoreCounter;
+    [SerializeField] private TMP_Text m_TimeCounter;
     [SerializeField] private CanvasGroup m_CinematicViewUI;
 
     [Header("ClickAnimation")]
@@ -30,9 +32,20 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    public void UpdateHighScoreCounter(float nb)
+    {
+        m_HighScoreCounter.text = "Hauteur Max : " + nb + "m";
+    }
     public void UpdateBubbleCounter(float nb)
     {
         m_BubbleCounter.text = "Essais : " + nb;
+    }
+
+    public void UpdateTimeCounter(float time)
+    {
+        float minutes = Mathf.FloorToInt(time / 60);
+        float seconds = Mathf.FloorToInt(time % 60);
+        m_TimeCounter.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     [ContextMenu("StopAnimation")]
