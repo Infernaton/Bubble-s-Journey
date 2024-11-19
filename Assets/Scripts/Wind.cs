@@ -54,9 +54,8 @@ public class Wind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_LifeTimeMax <= 0) return;
         if (Time.time - _currentLifeTime >= m_LifeTimeMax) Destroy(gameObject);
-
-
     }
 
     private void OnTriggerEnter(Collider collider)
