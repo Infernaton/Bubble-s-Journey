@@ -41,6 +41,9 @@ public class Bubble : MonoBehaviour
         {
             Destroy(gameObject);
             GameManager.Instance.SpawnBubble();
+            ParticleSystem particle = GameManager.Instance.GetParticles(Particle.DestroyedBubble);
+            particle.gameObject.transform.position = transform.position;
+            particle.Play();
         }
     }
 

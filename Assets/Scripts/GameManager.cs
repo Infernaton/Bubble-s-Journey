@@ -10,6 +10,11 @@ public enum GameState
     EndGame
 }
 
+public enum Particle
+{
+    DestroyedBubble,
+}
+
 public class GameManager : MonoBehaviour
 {
     public GameState State;
@@ -28,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] float m_BorderTPOffset;
 
     [SerializeField] float m_ScrollingSpeed;
+
+    [Header("ParticlesPool")]
+    [SerializeField] ParticleSystem m_DestroyedBubble;
 
     private float _nbBubble;
     public float NbBubble
@@ -64,6 +72,17 @@ public class GameManager : MonoBehaviour
         Vector3 pos = Vector3.Lerp(m_SpawnPos1, m_SpawnPos2, Random.value);
         Instantiate(m_BubblePrefab, pos, Quaternion.identity, transform);
         NbBubble++;
+    }
+
+    public ParticleSystem GetParticles(Particle name)
+    {
+        switch (name)
+        {
+            case Particle.DestroyedBubble:
+                return m_DestroyedBubble;
+            default:
+                return null;
+        }
     }
 
     private void Awake()
