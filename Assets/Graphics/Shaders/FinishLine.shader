@@ -52,8 +52,7 @@ Shader "Unlit/FinishLine"
             }
 
             fixed4 frag (v2f i) : SV_Target
-            {                
-                fixed stagedX = stagedDistance(i.uv.x, _NbRow);
+            {
                 fixed nbCase = floor(i.uv.x * _NbRow);
                 
                 // sample the texture
