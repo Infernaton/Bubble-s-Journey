@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHighScoreCounter(float nb)
     {
-        m_HighScoreCounter.text = "Hauteur Max : " + nb + "m";
+        m_HighScoreCounter.text = "Progression : " + nb + "%";
     }
     public void UpdateBubbleCounter(float nb)
     {

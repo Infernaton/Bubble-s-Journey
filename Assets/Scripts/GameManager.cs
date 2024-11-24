@@ -2,6 +2,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System.Collections;
 using Utils;
+using System.Linq;
 
 public enum GameState
 {
@@ -24,15 +25,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Bubble m_BubblePrefab;
     [SerializeField] Vector3 m_SpawnPos1;
     [SerializeField] Vector3 m_SpawnPos2;
+    [SerializeField] GameObject m_FinishArea;
 
     [Header("During Game")]
-    [SerializeField] Vector3 m_AscendingObjectOffset;
-    [SerializeField] GameObject AscendingObject;
-    [SerializeField] GameObject m_Background;
+    [SerializeField] ScrollingObject[] AscendingObjects;
     [SerializeField] Wind m_WindPrefab;
     [SerializeField] float m_BorderTPOffset;
-
-    [SerializeField] float m_ScrollingSpeed;
 
     [Header("ParticlesPool")]
     [SerializeField] ParticleSystem m_DestroyedBubble;
@@ -57,7 +55,8 @@ public class GameManager : MonoBehaviour
             if (value > _highScore)
             {
                 _highScore = value;
-                UIManager.Instance.UpdateHighScoreCounter(Mathf.Round(value)); 
+                float percentage = (_highScore / m_FinishArea.transform.position.y) * 100;
+                UIManager.Instance.UpdateHighScoreCounter(Mathf.Round(percentage)); 
             }
         }
     }
@@ -121,15 +120,16 @@ public class GameManager : MonoBehaviour
 
         UIManager.Instance.UpdateTimeCounter(Time.time);
 
-        UpdateCameraPosition();
+        UpdateAscendingObjectsPosition();
     }
 
-    private void UpdateCameraPosition()
+    private void UpdateAscendingObjectsPosition()
     {
-        AscendingObject.transform.position = Vector3.Lerp(
-            AscendingObject.transform.position,
-            m_AscendingObjectOffset + Vector3.up * AverageBubblePosition().y,
-            Time.smoothDeltaTime * m_ScrollingSpeed);
+        Vector3 dest = AverageBubblePosition();
+        foreach (var item in AscendingObjects)
+        {
+            item.UpdatePosition(dest);
+        }
     }
 
     Vector3 GetMousePositionIG(Vector2 mousePositionOnScreen)
