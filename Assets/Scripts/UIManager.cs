@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text m_HighScoreCounter;
     [SerializeField] private TMP_Text m_TimeCounter;
     [SerializeField] private CanvasGroup m_CinematicViewUI;
+    [SerializeField] private CanvasGroup m_TitleScreen;
 
     [Header("ClickAnimation")]
     [SerializeField] private Texture m_CursorIcon;
@@ -32,6 +34,7 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    #region Update Counter
     public void UpdateHighScoreCounter(float nb)
     {
         m_HighScoreCounter.text = "Progression : " + nb + "%";
@@ -40,13 +43,22 @@ public class UIManager : MonoBehaviour
     {
         m_BubbleCounter.text = "Essais : " + nb;
     }
-
     public void UpdateTimeCounter(float time)
     {
         float minutes = Mathf.FloorToInt(time / 60);
         float seconds = Mathf.FloorToInt(time % 60);
         m_TimeCounter.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
+    #endregion
+
+    public void DisplayTitleScreen(bool isVisible)
+    {
+        if (isVisible)
+            StartCoroutine(Anim.FadeIn(0.5f, m_TitleScreen));
+        else
+            StartCoroutine(Anim.FadeOut(0.3f, m_TitleScreen));
+    }
+
 
     [ContextMenu("StopAnimation")]
     public void StopAnimation()

@@ -2,10 +2,10 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System.Collections;
 using Utils;
-using System.Linq;
 
 public enum GameState
 {
+    Menu,
     PlayAnimation,
     CanInterract,
     EndGame
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     private Vector2 _startWind;
     public Vector2 MousePositionOnScreen => Mouse.current.position.value;
     public float GetBorderTPOffset() => m_BorderTPOffset;
@@ -94,20 +95,53 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        State = GameState.PlayAnimation;
-        float time = m_SpawnBubbleTime;
-        Invoke(nameof(SpawnBubble), time/2);
-        StartCoroutine(GameStart());
+        State = GameState.Menu;
+        UIManager.Instance.DisplayTitleScreen(true);
     }
 
     void Update()
     {
         Physics.simulationMode = State != GameState.CanInterract ? SimulationMode.Script : SimulationMode.FixedUpdate;
-        if (State != GameState.CanInterract) return;
+        switch (State)
+        {
+            case GameState.Menu:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    State = GameState.PlayAnimation;
+                    UIManager.Instance.DisplayTitleScreen(false);
+                    StartGame();
+                }
+                break;
+            case GameState.CanInterract:
+                UpdateGame();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void StartGame()
+    {
+        float time = m_SpawnBubbleTime;
+        Invoke(nameof(SpawnBubble), time / 2);
+        StartCoroutine(GameStartAnimation());
+    }
+
+    private IEnumerator GameStartAnimation()
+    {
+        yield return new WaitForSeconds(m_SpawnBubbleTime);
+        yield return Anim.SlideOut(0.4f, UIManager.Instance.CinematicView);
+        StartCoroutine(UIManager.Instance.ClickAnimation());
+        State = GameState.CanInterract;
+    }
+
+    private void UpdateGame()
+    {
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
             _startWind = MousePositionOnScreen;
-        if (Mouse.current.leftButton.wasReleasedThisFrame){
+        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        {
             // Delayed the position In Game of the mouse position at pressed event
             // Because their a constant camera movement: the initial position when pressed is not really respected when we release the button, and feal a little uncanny
             Vector3 startPosIG = GetMousePositionIG(_startWind);
@@ -154,14 +188,6 @@ public class GameManager : MonoBehaviour
             average += child.position;
         }
         return average / transform.childCount;
-    }
-
-    private IEnumerator GameStart()
-    {
-        yield return new WaitForSeconds(m_SpawnBubbleTime);
-        yield return Anim.SlideOut(0.4f, UIManager.Instance.CinematicView);
-        StartCoroutine(UIManager.Instance.ClickAnimation());
-        State = GameState.CanInterract;
     }
 
     public void GameOver()
