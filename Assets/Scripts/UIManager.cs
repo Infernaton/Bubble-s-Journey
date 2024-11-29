@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text m_TimeCounter;
     [SerializeField] private CanvasGroup m_CinematicViewUI;
     [SerializeField] private CanvasGroup m_TitleScreen;
+    [SerializeField] private CanvasGroup m_VictoryScreen;
 
     [Header("ClickAnimation")]
     [SerializeField] private Texture m_CursorIcon;
@@ -81,20 +82,20 @@ public class UIManager : MonoBehaviour
         m_RawImageObject.texture = m_CursorIcon;
         
         //Start
-        yield return Utils.Anim.FadeIn(fadeTime, m_RawImageObject);
+        yield return Anim.FadeIn(fadeTime, m_RawImageObject);
         yield return new WaitForSeconds(idleTime);
 
         //Hold Click
         m_RawImageObject.texture = m_CursorClickIcon;
 
         //Moves to destination
-        yield return Utils.Anim.MoveUI(m_RawImageObject.rectTransform, m_EndPosAnimation, m_AnimationTime - 2*idleTime - 2*fadeTime, m_MovementCurve);
+        yield return Anim.MoveUI(m_RawImageObject.rectTransform, m_EndPosAnimation, m_AnimationTime - 2*idleTime - 2*fadeTime, m_MovementCurve);
 
         //Release Click
         m_RawImageObject.texture = m_CursorIcon;
 
         //End
         yield return new WaitForSeconds(idleTime);
-        yield return Utils.Anim.FadeOut(fadeTime, m_RawImageObject);
+        yield return Anim.FadeOut(fadeTime, m_RawImageObject);
     }
 }

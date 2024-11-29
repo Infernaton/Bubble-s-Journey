@@ -166,6 +166,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
+        State = GameState.EndGame;
+        StartCoroutine(GameOverAnimation());
+    }
+
+    private IEnumerator GameOverAnimation()
+    {
+        yield return null;
+    }
+
     Vector3 GetMousePositionIG(Vector2 mousePositionOnScreen)
     {
         Vector3 startPos = new (mousePositionOnScreen.x, mousePositionOnScreen.y, Camera.main.nearClipPlane);
@@ -188,12 +200,6 @@ public class GameManager : MonoBehaviour
             average += child.position;
         }
         return average / transform.childCount;
-    }
-
-    public void GameOver()
-    {
-        Debug.Log("GameOver");
-        State = GameState.EndGame;
     }
 
     private void OnDrawGizmosSelected()
