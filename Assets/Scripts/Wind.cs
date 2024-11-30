@@ -73,6 +73,11 @@ public class Wind : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        GameManager.Instance.RemoveGlobalWindEffect(this);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;

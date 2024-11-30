@@ -127,6 +127,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region Handle State game
     private void StartGame()
     {
         float time = m_SpawnBubbleTime;
@@ -185,7 +186,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.DisplayVictoryScreen(true);
         State = GameState.EndGame;
     }
-
+    #endregion
 
     Vector3 GetMousePositionIG(Vector2 mousePositionOnScreen)
     {
@@ -209,6 +210,16 @@ public class GameManager : MonoBehaviour
             average += child.position;
         }
         return average / transform.childCount;
+    }
+
+    //Wind Effect are still stored in the bubble's wind list if he diseapear before the bubble exit by itself
+    public void RemoveGlobalWindEffect(Wind wind)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.TryGetComponent<Bubble>(out var bubble))
+                bubble.RemoveWindEffect(wind);
+        }
     }
 
     private void ReloadScene()

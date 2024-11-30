@@ -5048,7 +5048,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Progression :'
+  m_text: 'Progression : 0%'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 479c37b3bae371747bebca8728a0258c, type: 2}
   m_sharedMaterial: {fileID: 3984207998733127402, guid: 479c37b3bae371747bebca8728a0258c, type: 2}
