@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Security.Cryptography;
 
 namespace Utils
 {
@@ -142,34 +143,19 @@ namespace Utils
         #region SlideIn/SlideOut
         public static IEnumerator SlideIn(float t, CanvasGroup i)
         {
-            
-            yield return SlideIn(t, i.gameObject, 1f);
+            i.gameObject.SetActive(true);
+            yield return Slide(t, i.gameObject, 1f);
         }
-
         public static IEnumerator SlideOut(float t, CanvasGroup i)
         {
-            yield return SlideOut(t, i.gameObject, 2f);
+            yield return Slide(t, i.gameObject, 2f);
+            i.gameObject.SetActive(false);
         }
-
-        private static IEnumerator SlideIn(float t, GameObject o, float targetScale)
+        private static IEnumerator Slide(float t, GameObject o, float targetScale)
         {
-            o.SetActive(true);
-            while (o.transform.localScale.x > targetScale)
-            {
-                Vector3 addScale = o.transform.localScale * targetScale * (Time.deltaTime / t);
-                o.transform.localScale = o.transform.localScale - addScale;
-                yield return null;
-            }
-        }
-        private static IEnumerator SlideOut(float t, GameObject o, float targetScale)
-        {
-            while (o.transform.localScale.x < targetScale)
-            {
-                Vector3 addScale = o.transform.localScale * targetScale * (Time.deltaTime / t);
-                o.transform.localScale = o.transform.localScale + addScale;
-                yield return null;
-            }
-            o.SetActive(false);
+            Vector3 from = o.transform.localScale;
+            Vector3 to = Vector3.one * targetScale;
+            yield return AnimationOnCurve(t, t => o.transform.localScale = Vector2.Lerp(from, to, t), AnimationCurve.Linear(0,0,1,1));
         }
         #endregion
 

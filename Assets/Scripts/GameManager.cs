@@ -2,6 +2,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System.Collections;
 using Utils;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -115,6 +116,12 @@ public class GameManager : MonoBehaviour
             case GameState.CanInterract:
                 UpdateGame();
                 break;
+            case GameState.EndGame:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ReloadScene();
+                }
+                break;
             default:
                 break;
         }
@@ -137,7 +144,6 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGame()
     {
-
         if (Mouse.current.leftButton.wasPressedThisFrame)
             _startWind = MousePositionOnScreen;
         if (Mouse.current.leftButton.wasReleasedThisFrame)
@@ -169,14 +175,17 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("GameOver");
-        State = GameState.EndGame;
+        State = GameState.PlayAnimation;
         StartCoroutine(GameOverAnimation());
     }
 
     private IEnumerator GameOverAnimation()
     {
-        yield return null;
+        yield return Anim.SlideIn(0.3f, UIManager.Instance.CinematicView);
+        UIManager.Instance.DisplayVictoryScreen(true);
+        State = GameState.EndGame;
     }
+
 
     Vector3 GetMousePositionIG(Vector2 mousePositionOnScreen)
     {
@@ -202,6 +211,10 @@ public class GameManager : MonoBehaviour
         return average / transform.childCount;
     }
 
+    private void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

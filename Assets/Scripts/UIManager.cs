@@ -59,6 +59,14 @@ public class UIManager : MonoBehaviour
         else
             StartCoroutine(Anim.FadeOut(0.3f, m_TitleScreen));
     }
+    public void DisplayVictoryScreen(bool isVisible)
+    {
+        if (isVisible)
+            StartCoroutine(Anim.FadeIn(0.15f, m_VictoryScreen));
+        else
+            StartCoroutine(Anim.FadeOut(0.3f, m_VictoryScreen));
+    }
+
 
 
     [ContextMenu("StopAnimation")]
